@@ -1,12 +1,13 @@
 const Rcon = require("rcon");
 const { ip, password, port } = require("../config.json");
+const { RconAuth } = require("../index");
 
 const options = {
   tcp: true,
   challenge: false,
 };
 const conn = new Rcon(ip, port, password, options);
-async function authentificate(RconAuth) {
+async function authentificate() {
   if (!RconAuth) {
     return new Promise((res, rej) => {
       try {
@@ -37,9 +38,7 @@ async function authentificate(RconAuth) {
 }
 
 async function send_message_rcon(message) {
-  let authenticated = false;
-  authenticated = await authentificate();
-  if (authenticated) {
+  if (RconAuth) {
     conn.send(`serverchat ${message}`);
     return "Message send";
   } else {
@@ -47,9 +46,7 @@ async function send_message_rcon(message) {
   }
 }
 async function broadcast(message) {
-  let authenticated = false;
-  authenticated = await authentificate();
-  if (authenticated) {
+  if (RconAuth) {
     conn.send(`broadcast ${message}`);
     return "Broadcast send";
   } else {
@@ -57,9 +54,7 @@ async function broadcast(message) {
   }
 }
 async function command(message) {
-  let authenticated = false;
-  authenticated = await authentificate();
-  if (authenticated) {
+  if (RconAuth) {
     conn.send(message);
     return "Command send";
   } else {
@@ -67,9 +62,7 @@ async function command(message) {
   }
 }
 async function kick(player) {
-  let authenticated = false;
-  authenticated = await authenticated();
-  if (authenticated) {
+  if (RconAuth) {
     conn.send(`kickplayer ${player}`);
     return `${player} kick`;
   } else {
@@ -77,9 +70,7 @@ async function kick(player) {
   }
 }
 async function get_player() {
-  let authenticated = false;
-  authenticated = await authenticated();
-  if (authenticated) {
+  if (RconAuth) {
     return new Promise((resolve, reject) => {
       let Player;
       conn.send("listplayers");
@@ -108,9 +99,7 @@ async function get_player() {
   }
 }
 async function get_log() {
-  let authenticated = false;
-  authenticated = await authenticated();
-  if (authenticated) {
+  if (RconAuth) {
     conn.send("getchat");
     conn.on("response", function (str) {
       console.log("Response: " + str);
@@ -125,9 +114,7 @@ async function get_log() {
   }
 }
 async function save_world() {
-  let authenticated = false;
-  authenticated = await authenticated();
-  if (authenticated) {
+  if (RconAuth) {
     conn.send("saveworld");
     return new Promise((resolve, reject) => {
       conn.on("response", function (str) {

@@ -1,10 +1,10 @@
 const wait = require("node:timers/promises").setTimeout;
 const RCON = require("./rcon");
-import { ServerStarting, ChangeServerStarting } from "../index";
+const { ServerStarting, ChangeServerStarting } = require("../index");
 
 // Return Server Status
-async function server_status(RconAuth) {
-  return await RCON.authentificate(RconAuth);
+async function server_status() {
+  return await RCON.authentificate();
 }
 // Send Message
 async function send_message(clients, channels, messages) {
@@ -18,13 +18,16 @@ async function send_message(clients, channels, messages) {
 
 // Handle The Start of the Server
 async function server_status_startup() {
-  for (i = 300; !(await RCON.server_status()) && ServerStarting; i--) {
+  // Wait for 50 minute
+  for (i = 300; !(await server_status()) && ServerStarting; i--) {
+    // If 50 minute pass, throw error
     if (i <= 0) {
       console.log("Error Time Out");
       throw "Server n'a pas réussi a s'allumé";
     }
     await wait(10000);
   }
+  // If server server as started make serverStarting at false end return true
   ChangeServerStarting(false);
   return true;
 }
