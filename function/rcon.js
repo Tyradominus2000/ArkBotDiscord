@@ -1,6 +1,6 @@
 const Rcon = require("rcon");
 const { ip, password, port } = require("../config.json");
-const { RconAuth } = require("../index");
+const { RconAuth } = require("../constants/constants");
 
 const options = {
   tcp: true,
@@ -76,7 +76,6 @@ async function get_player() {
       conn.send("listplayers");
       conn.on("response", function (str) {
         //console.log("Response: " + str);
-        Player;
         if (typeof str == "string") {
           Player = str.split(" ");
           for (i = 0; i < Player.length; i++) {

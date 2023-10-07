@@ -1,10 +1,13 @@
 const wait = require("node:timers/promises").setTimeout;
-const RCON = require("./rcon");
-const { ServerStarting, ChangeServerStarting } = require("../index");
+const {
+  ServerStarting,
+  ChangeServerStarting,
+} = require("../constants/constants");
+const { authentificate } = require("./rcon");
 
 // Return Server Status
 async function server_status() {
-  return await RCON.authentificate();
+  return await authentificate();
 }
 // Send Message
 async function send_message(clients, channels, messages) {

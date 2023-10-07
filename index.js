@@ -3,19 +3,7 @@ const path = require("node:path"); // Path module
 const { Client, Collection, Events, GatewayIntentBits } = require("discord.js"); // Discord.js library
 const { token } = require("./config.json");
 const Function = require("./function/function"); // Importing custom function module
-
-let ServerStatus = false; //Server State
-let RconAuth = false; //Rcon Auth State
-let ServerStarting = false; //Server Starting state
-function ChangeServerStatus(NewState) {
-  ServerStatus = NewState;
-}
-function ChangeServerStarting(NewState) {
-  ServerStarting = NewState;
-}
-function ChangeRconAuth(NewState) {
-  RconAuth = NewState;
-}
+const { ServerStatus, RconAuth } = require("./constants/constants");
 
 global.client = new Client({
   intents: [
@@ -80,11 +68,3 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 client.login(token); // Logging in with the bot's token
-module.exports = {
-  ChangeRconAuth,
-  ChangeServerStarting,
-  ChangeServerStatus,
-  ServerStarting,
-  ServerStatus,
-  RconAuth,
-};
