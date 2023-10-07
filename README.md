@@ -15,7 +15,7 @@ You will need a server Folder containing 2 .bat file :
 "token": your discord bot token here,
 "clientId": your client Id here,
 "guildId": your guild Id here,
-"ip": the ip of the arc server,
+"ip": the ip of the ark server,
 "password": the password of the ark server,
 "port": the port of the RCON port
 ```
