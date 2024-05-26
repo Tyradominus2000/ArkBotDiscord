@@ -2,9 +2,8 @@ const fs = require("node:fs"); // File system module
 const path = require("node:path"); // Path module
 const { Client, Collection, Events, GatewayIntentBits } = require("discord.js"); // Discord.js library
 const { token } = require("./config.json");
-const Function = require("./function/function"); // Importing custom function module
-const { ServerStatus, RconAuth } = require("./constants/constants");
-
+const { ip, password, port } = require("../config.json");
+const Server = require("./class/Server");
 global.client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -17,9 +16,15 @@ global.client = new Client({
 client.once(Events.ClientReady, async (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
   try {
-    RconAuth = await Function.server_status();
-    ServerStatus = RconAuth;
-    console.log("Server Status " + ServerStatus);
+    const server = new Server({
+      host: ip,
+      port: port,
+      password: password,
+      options: {
+        tcp: true,
+        challenge: false,
+      },
+    });
   } catch (error) {
     throw error;
   }
