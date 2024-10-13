@@ -1,16 +1,28 @@
-const { SlashCommandBuilder } = require("discord.js");
+const {
+  SlashCommandBuilder,
+  ChatInputCommandInteraction,
+} = require("discord.js");
+const { ServerArk, TypeMessage } = require("../class/Server");
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName("ping")
-        .setDescription("ping the bot"),
-    async execute(interaction) {
-        if (interaction.member.user.username == `Kwadz'`) {
-            interaction.reply("PONG mon bro");
-        } else if (interaction.member.user.username == `ThePig'`) {
-            interaction.reply("PONG PONG");
-        } else {
-            interaction.reply("pong");
-        }
-    },
+  data: new SlashCommandBuilder()
+    .setName("ping")
+    .setDescription("ping the bot"),
+  /**
+   * @param {ChatInputCommandInteraction<CacheType>} interaction
+   * @param {ServerArk} server
+   */
+  async execute(interaction, server) {
+    server.handleLog(
+      `${interaction.member.user.username} call commands ping `,
+      TypeMessage.Information
+    );
+    if (interaction.member.user.username === `kwadzarimon`) {
+      interaction.reply("PONG mon bro");
+    } else if (interaction.member.user.username === `.thepig`) {
+      interaction.reply("PONG PONG");
+    } else {
+      interaction.reply("pong");
+    }
+  },
 };

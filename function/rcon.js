@@ -1,6 +1,10 @@
+/**
+ * @deprecated
+ */
+
 const Rcon = require("rcon");
 const { ip, password, port } = require("../config.json");
-const { RconAuth } = require("../constants/constants");
+const { RconAuth } = require("../class/Server");
 
 const options = {
   tcp: true,

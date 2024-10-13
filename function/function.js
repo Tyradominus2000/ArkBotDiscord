@@ -1,8 +1,12 @@
+/**
+ * @deprecated
+ */
+
 const wait = require("node:timers/promises").setTimeout;
 const {
   ServerStarting,
   ChangeServerStarting,
-} = require("../constants/constants");
+} = require("../class/Server");
 const { authentificate } = require("./rcon");
 
 // Return Server Status
