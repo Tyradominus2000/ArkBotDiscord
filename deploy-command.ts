@@ -1,12 +1,12 @@
-const { REST, Routes } = require("discord.js");
-const { clientId, guildId, token } = require("./config.json");
-const fs = require("node:fs");
+import fs from "node:fs";
+import { SlashCommandBuilder, REST, Routes } from "discord.js";
+import { clientId, guildId, token } from "./config.json";
 
-const commands = [];
+const commands: SlashCommandBuilder[] = [];
 // Grab all the command files from the commands directory you created earlier
 const commandFiles = fs
   .readdirSync("./commands")
-  .filter((file) => file.endsWith(".js"));
+  .filter((file: string) => file.endsWith(".js"));
 
 // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 for (const file of commandFiles) {
@@ -25,10 +25,10 @@ const rest = new REST({ version: "10" }).setToken(token);
     );
 
     // The put method is used to fully refresh all commands in the guild with the current set
-    const data = await rest.put(
+    const data = (await rest.put(
       Routes.applicationGuildCommands(clientId, guildId),
       { body: commands }
-    );
+    )) as any[];
 
     console.log(
       `Successfully reloaded ${data.length} application (/) commands.`

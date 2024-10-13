@@ -1,9 +1,10 @@
-const {
+import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
   PermissionFlagsBits,
-} = require("discord.js");
-const { ServerArk } = require("../class/Server");
+  CacheType,
+} from "discord.js";
+import { ServerArk } from "../class/Server";
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -18,11 +19,11 @@ module.exports = {
         .setRequired(true)
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
-  /**
-   * @param {ChatInputCommandInteraction<CacheType>} interaction
-   * @param {ServerArk} server
-   */
-  async execute(interaction, server) {
+
+  async execute(
+    interaction: ChatInputCommandInteraction<CacheType>,
+    server: ServerArk
+  ) {
     const player = interaction.options.getInteger("player");
     const result = server.rconKick(player);
 

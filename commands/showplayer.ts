@@ -1,18 +1,12 @@
-const {
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-} = require("discord.js");
-const { ServerArk } = require("../class/Server");
+import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from "discord.js";
+import { ServerArk } from "../class/Server";
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("showplayer")
     .setDescription("Show all the information about player"),
-  /**
-   * @param {ChatInputCommandInteraction<CacheType>} interaction
-   * @param {ServerArk} server
-   */
-  async execute(interaction, server) {
+
+  async execute(interaction: ChatInputCommandInteraction<CacheType>, server: ServerArk) {
     await interaction.deferReply();
 
     const player = await server.rconGetPlayer();

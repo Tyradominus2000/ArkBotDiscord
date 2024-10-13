@@ -1,18 +1,12 @@
-const {
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-} = require("discord.js");
-const { ServerArk } = require("../class/Server");
+import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from "discord.js";
+import { ServerArk } from "../class/Server";
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("authentificate")
     .setDescription("Authentificate to the RCON"),
-  /**
-   * @param {ChatInputCommandInteraction<CacheType>} interaction
-   * @param {ServerArk} server
-   */
-  async execute(interaction, server) {
+
+  async execute(interaction: ChatInputCommandInteraction<CacheType>, server: ServerArk) {
     const result = server.rconAuthentificate();
     if (result) {
       interaction.reply("Authentification au rcon");

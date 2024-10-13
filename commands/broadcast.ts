@@ -1,9 +1,10 @@
-const {
+import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
   PermissionFlagsBits,
-} = require("discord.js");
-const { ServerArk } = require("../class/Server");
+  CacheType,
+} from "discord.js";
+import { ServerArk } from "../class/Server";
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,17 +17,19 @@ module.exports = {
         .setRequired(true)
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
-  /**
-   * @param {ChatInputCommandInteraction<CacheType>} interaction
-   * @param {ServerArk} server
-   */
-  async execute(interaction, server) {
+
+  async execute(
+    interaction: ChatInputCommandInteraction<CacheType>,
+    server: ServerArk
+  ) {
     const message = interaction.options.getString("broadcast");
-    const result = server.rconBroadcast(message);
-    if (result) {
-      interaction.reply(`${message} send`);
-    } else {
-      interaction.reply(`Fail to send message`);
+    if (message !== null) {
+      const result = server.rconBroadcast(message);
+      if (result) {
+        interaction.reply(`${message} send`);
+        return;
+      }
     }
+    interaction.reply(`Fail to send message or message invalid`);
   },
 };

@@ -1,44 +1,45 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const { ip, password, port, token } = require("../config.json");
-const { ServerArk } = require("../class/Server");
-const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
+import fs from "node:fs";
+import path from "node:path";
+import * as Config from "../config.json";
+import { ServerArk } from "../class/Server";
+import * as Discord from "discord.js";
+import MyClient from "../class/MyClient";
 
-const client = new Client({
+const client = new MyClient({
   intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMessageReactions,
+    Discord.GatewayIntentBits.Guilds,
+    Discord.GatewayIntentBits.GuildMessages,
+    Discord.GatewayIntentBits.MessageContent,
+    Discord.GatewayIntentBits.GuildMessageReactions,
   ], // Setting Discord bot intents
 });
 
 // Create server instance
 const server = new ServerArk(
   {
-    host: ip,
-    port: port,
-    password: password,
+    host: Config.ip,
+    port: Config.port,
+    password: Config.password,
     options: {
       tcp: true,
       challenge: false,
     },
   },
   client,
-  "E:/Zone1/Ark/ArkBot/server/log/",
-  "bots"
+  Config.pathLog,
+  "1035193472195514434"
 );
 // Authentificate the client
-client.login(token);
+client.login(Config.token);
 
 // When client as started
-client.once(Events.ClientReady, async (c) => {
+client.once(Discord.Events.ClientReady, async (c) => {
   const time = ServerArk.getTime();
   console.log(`${time} Discord: Ready! Logged in as ${c.user.tag}`);
 });
 
 /* HANDELING OF COMMAND FOR DISCORDBOT */
-client.commands = new Collection(); // Creating a collection for bot commands
+client.commands = new Discord.Collection(); // Creating a collection for bot commands
 
 const commandsPath = "E:/Zone1/Ark/ArkBot/commands";
 
@@ -59,10 +60,12 @@ for (const file of commandFiles) {
   }
 }
 
-client.on(Events.InteractionCreate, async (interaction) => {
+client.on(Discord.Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
-  const command = interaction.client.commands.get(interaction.commandName);
+  const command = (interaction.client as MyClient).commands.get(
+    interaction.commandName
+  );
 
   if (!command) {
     console.error(`No command matching ${interaction.commandName} was found.`);

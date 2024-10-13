@@ -1,18 +1,19 @@
-const {
+import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
-} = require("discord.js");
-const { ServerArk } = require("../class/Server");
+  CacheType,
+} from "discord.js";
+import { ServerArk } from "../class/Server";
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("serverstop")
     .setDescription("stop the ArkServer"),
-  /**
-   * @param {ChatInputCommandInteraction<CacheType>} interaction
-   * @param {ServerArk} server
-   */
-  async execute(interaction, server) {
+
+  async execute(
+    interaction: ChatInputCommandInteraction<CacheType>,
+    server: ServerArk
+  ) {
     await interaction.deferReply();
     const state = server.getStatus();
 
@@ -23,7 +24,7 @@ module.exports = {
         if (player[0] == "No") {
           await server.rconSaveWorld();
 
-          const result = server.stopServer();
+          const result = server.stopServer(interaction.member?.user.id);
           if (result) {
             interaction.editReply("Arrêt du Server");
           } else {

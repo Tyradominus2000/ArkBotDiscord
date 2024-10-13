@@ -10,9 +10,9 @@
     "rcon": "^1.1.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "deploy": "node deploy-command.js"
+    "test": "node ./build/test/test.js",
+    "start": "node ./build/index.js",
+    "deploy": "node ./build/deploy-command.js"
   },
   "author": "Tyradominus2000",
   "license": "ISC"

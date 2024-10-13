@@ -1,46 +1,46 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
-const { token } = require("./config.json");
-const { ip, password, port } = require("../config.json");
-const { ServerArk } = require("./class/Server");
+import * as Discord from "discord.js";
+import MyClient from "./class/MyClient";
+import fs from "node:fs";
+import path from "node:path"
+import * as Config from "./config.json";
+import { ServerArk } from "./class/Server";
 
+
+const client = new MyClient({
+  intents: [
+    Discord.GatewayIntentBits.Guilds,
+    Discord.GatewayIntentBits.GuildMessages,
+    Discord.GatewayIntentBits.MessageContent,
+    Discord.GatewayIntentBits.GuildMessageReactions,
+  ], // Setting Discord bot intents
+});
 const server = new ServerArk(
   {
-    host: ip,
-    port: port,
-    password: password,
+    host: Config.ip,
+    port: Config.port,
+    password: Config.password,
     options: {
       tcp: true,
       challenge: false,
     },
   },
   client,
-  "E:/Zone1/Ark/ArkBot/server/log/",
-  "bots"
+  Config.pathLog,
+  Config.channelId
 );
 
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMessageReactions,
-  ], // Setting Discord bot intents
-});
-
-client.once(Events.ClientReady, async (c) => {
+client.once( Discord.Events.ClientReady, async (c:  Discord.Client) => {
   const time = ServerArk.getTime();
   console.log(`${time} Discord: Ready! Logged in as ${c.user.tag}`);
 });
 
 /* HANDELING OF COMMAND FOR DISCORDBOT */
-client.commands = new Collection(); // Creating a collection for bot commands
+client.commands = new Discord.Collection(); // Creating a collection for bot commands
 
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs
   .readdirSync(commandsPath)
-  .filter((file) => file.endsWith(".js")); // Reading and filtering command files
+  .filter((file: string) => file.endsWith(".js")); // Reading and filtering command files
 
 for (const file of commandFiles) {
   const filePath = path.join(commandsPath, file);
@@ -55,10 +55,10 @@ for (const file of commandFiles) {
   }
 }
 
-client.on(Events.InteractionCreate, async (interaction) => {
+client.on(Discord.Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
-  const command = interaction.client.commands.get(interaction.commandName);
+  const command = (interaction.client as MyClient).commands.get(interaction.commandName);
 
   if (!command) {
     console.error(`No command matching ${interaction.commandName} was found.`);
@@ -76,4 +76,4 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 });
 
-client.login(token); // Logging in with the bot's token
+client.login(Config.token); // Logging in with the bot's token
